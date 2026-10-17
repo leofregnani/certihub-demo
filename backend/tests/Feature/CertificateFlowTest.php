@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Course;
 use App\Models\Participant;
 use App\Models\User;
+use App\Services\CertificateService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
@@ -109,5 +110,13 @@ class CertificateFlowTest extends TestCase
             ->assertHeader('content-type', 'application/pdf');
 
         $this->assertDatabaseHas('activity_logs', ['action' => 'certificate.downloaded']);
+    }
+
+    public function test_qr_code_is_generated_as_a_png_data_uri(): void
+    {
+        $uri = app(CertificateService::class)->qrDataUri('http://localhost:5173/validate/CRT-2026-AAAAAAAA');
+
+        $this->assertNotNull($uri, 'QR generation failed (check the gd extension and the qrcode options)');
+        $this->assertStringStartsWith('data:image/png;base64,', $uri);
     }
 }

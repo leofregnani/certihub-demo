@@ -54,11 +54,11 @@ class CertificateService
         ])->setPaper('a4', 'landscape');
     }
 
-    private function qrDataUri(string $url): ?string
+    public function qrDataUri(string $url): ?string
     {
         try {
             $options = new QROptions([
-                'outputType' => QROutputInterface::GDIMG_PNG,
+                'outputType' => QROutputInterface::GDIMAGE_PNG,
                 'outputBase64' => true,
                 'scale' => 6,
                 'quietzoneSize' => 1,
